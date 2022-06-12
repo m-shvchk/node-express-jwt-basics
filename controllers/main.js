@@ -26,28 +26,9 @@ const login = async (req, res) => {
 }
 
 const dashboard = async (req, res) => {
-    const authHeader = req.headers.authorization; 
-    // request for protected route must be made with authorization: "Bearer <jwt token>" 
-
-    if(!authHeader || !authHeader.startsWith('Bearer ')){
-        throw new CustomApiError('No token provided', 401) // 401 - auth errror
-    }
-
-    const token = authHeader.split(' ')[1]; // getting token from authHeader "Bearer <jwt token>"
-
-    // verify the token (jsonwebtoken package method):
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        // console.log(decoded) -> { id: 12, username: 'john', iat: 1655031342, exp: 1657623342 } 
-        // -> goes from jwt.sign(...)
-
-        const luckyNumber = Math.floor(Math.random() * 100)
-        res.status(200).json({msg: `Hello, ${decoded.username}`, secret: `Here is your authorized data. Your lucky number is ${luckyNumber}`})
-    }catch(e){
-        throw new CustomApiError('Not authorized to enter the route', 401)
-    }
-
-}
+    const luckyNumber = Math.floor(Math.random() * 100)
+    res.status(200).json({msg: `Hello, ${req.user.username}`, secret: `Here is your authorized data. Your lucky number is ${luckyNumber}`})
+} // WE GET PROPERTY USER SET AT REQUEST OBJECT IN AUTH MIDDLEWARE  
 
 module.exports = {
     login,
