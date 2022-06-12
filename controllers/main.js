@@ -3,7 +3,7 @@
 // 3. Send JWT to the frontend. Frontend needs to access it in order to send another request (GET)
 // 4. Set up autentication. Only GET request with JWT can access the dashboard
 
-const CustomApiError = require('../errors/custom-error')
+const { BadRequestError } = require('../errors') // index.js is default, we can omit it
 const jwt = require('jsonwebtoken') // package to work with JWT
 
 const login = async (req, res) => {
@@ -14,7 +14,7 @@ const login = async (req, res) => {
     // - checking manually here +
 
     if(!username || !password){
-        throw new CustomApiError('Please provide email and password', 400)
+        throw new BadRequestError('Please provide email and password')
     }
 
     const id = new Date().getDate() // FOR DEMO PURPOSES. Normally provided by DB
